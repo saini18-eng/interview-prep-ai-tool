@@ -1,0 +1,117 @@
+# This is a basic workflow to he<!-- interview-prep.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interview Prep AI Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-xl">
+        <h1 class="text-2xl font-bold mb-4 text-blue-700">Interview Prep AI Tool</h1>
+        <input id="topic" type="text" class="border p-2 rounded w-full mb-4" placeholder="Enter interview topic...">
+        <button id="start" class="bg-blue-600 text-white px-4 py-2 rounded mb-4 w-full">Start Interview</button>
+        <div id="chat" class="mb-4"></div>
+        <textarea id="answer" class="border p-2 rounded w-full mb-2" rows="2" placeholder="Type your answer..." disabled></textarea>
+        <button id="send" class="bg-blue-500 text-white px-4 py-2 rounded w-full" disabled>Send Answer</button>
+        <div id="feedback" class="mt-4"></div>
+    </div>
+    <script>
+        const startBtn = document.getElementById('start');
+        const sendBtn = document.getElementById('send');
+        const topicInput = document.getElementById('topic');
+        const chatDiv = document.getElementById('chat');
+        const answerInput = document.getElementById('answer');
+        const feedbackDiv = document.getElementById('feedback');
+
+        let currentQuestion = '';
+        let interviewHistory = [];
+
+        startBtn.onclick = async () => {
+            const topic = topicInput.value.trim();
+            if (!topic) return alert('Enter a topic!');
+            chatDiv.innerHTML = '';
+            feedbackDiv.innerHTML = '';
+            interviewHistory = [{
+                role: "user",
+                parts: [{ text: `I want to practice for a "${topic}" interview. Please ask me the first question.` }]
+            }];
+            answerInput.disabled = true;
+            sendBtn.disabled = true;
+            chatDiv.innerHTML += `<div class="text-gray-500 mb-2">Generating question...</div>`;
+            // Simulate AI question (replace with API call)
+            setTimeout(() => {
+                currentQuestion = `Why are you interested in the ${topic} position?`;
+                chatDiv.innerHTML += `<div class="bg-blue-100 p-2 rounded mb-2">${currentQuestion}</div>`;
+                answerInput.disabled = false;
+                sendBtn.disabled = false;
+            }, 1000);
+        };
+
+        sendBtn.onclick = async () => {
+            const answer = answerInput.value.trim();
+            if (!answer) return alert('Type your answer!');
+            chatDiv.innerHTML += `<div class="bg-gray-200 p-2 rounded mb-2 text-right">${answer}</div>`;
+            answerInput.value = '';
+            answerInput.disabled = true;
+            sendBtn.disabled = true;
+            feedbackDiv.innerHTML = `<div class="text-gray-500">Analyzing answer...</div>`;
+            // Simulate AI feedback (replace with API call)
+            setTimeout(() => {
+                feedbackDiv.innerHTML = `
+                    <div class="bg-green-100 p-2 rounded">
+                        <strong>Score:</strong> 8/10<br>
+                        <strong>Summary:</strong> Good motivation, but could mention specific company values.<br>
+                        <ul class="list-disc ml-6">
+                            <li>Be more specific about your skills.</li>
+                            <li>Mention why this company stands out.</li>
+                        </ul>
+                    </div>
+                `;
+                // Simulate next question
+                setTimeout(() => {
+                    currentQuestion = `Can you describe a challenging project you worked on?`;
+                    chatDiv.innerHTML += `<div class="bg-blue-100 p-2 rounded mb-2">${currentQuestion}</div>`;
+                    answerInput.disabled = false;
+                    sendBtn.disabled = false;
+                }, 1500);
+            }, 1500);
+        };
+    </script>
+</body>
+</html>lp you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
